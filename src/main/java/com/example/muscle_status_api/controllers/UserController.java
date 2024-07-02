@@ -3,6 +3,8 @@ package com.example.muscle_status_api.controllers;
 import com.example.muscle_status_api.domain.user.RequestUser;
 import com.example.muscle_status_api.domain.user.User;
 import com.example.muscle_status_api.domain.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,16 +32,36 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity uptadeUser(@PathVariable Long id, @RequestBody @Valid RequestUser data) {
-        Optional<User> user = repository.findById(id);
-
-        user.get().setName(data.name());
-        user.get().setEmail(data.email());
-        user.get().setPassword(data.password());
-        System.out.println(user);
-        return ResponseEntity.ok(user);
+    @Transactional
+    @PutMapping
+    public ResponseEntity uptadeUser(@RequestBody @Valid RequestUser data) {
+        Optional<User> optionalUser = repository.findById(data.id());
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setName(data.name());
+            user.setEmail(data.email());
+            user.setPassword(data.password());
+            return ResponseEntity.ok(user);
+        }
+        else {
+            throw new EntityNotFoundException();
+        }
     }
+
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(@PathVariable @Valid Long id){
+        Optional<User> optionalUser = repository.findById(id);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            repository.delete(user);
+            return ResponseEntity.ok("User "+user+"W was deleted");
+        }
+        else {
+            throw new EntityNotFoundException();
+        }
+    }
+
 
 
 

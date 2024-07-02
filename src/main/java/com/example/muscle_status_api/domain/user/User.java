@@ -30,6 +30,5 @@ public class User {
         this.email = requestUser.email();
         this.password = requestUser.password();
         this.created_at = gmtTime.toString();
-
     }
 }
