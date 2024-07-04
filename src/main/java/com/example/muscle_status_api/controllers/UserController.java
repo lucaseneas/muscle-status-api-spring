@@ -55,7 +55,7 @@ public class UserController {
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             repository.delete(user);
-            return ResponseEntity.ok("User "+user+"W was deleted");
+            return ResponseEntity.ok("User "+user+" was deleted");
         }
         else {
             throw new EntityNotFoundException();
