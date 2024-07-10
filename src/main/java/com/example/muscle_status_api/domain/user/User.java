@@ -20,11 +20,10 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String created_at;
+    private String created_at = ZonedDateTime.now(ZoneId.of("GMT")).toString();
 
     public User (RequestUser requestUser) {
         ZonedDateTime gmtTime = ZonedDateTime.now(ZoneId.of("GMT"));
-        System.out.println(gmtTime.toString());
 
         this.name = requestUser.name();
         this.email = requestUser.email();
