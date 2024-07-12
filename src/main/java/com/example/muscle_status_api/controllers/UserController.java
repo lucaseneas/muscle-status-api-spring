@@ -34,7 +34,7 @@ public class UserController {
 
     @Transactional
     @PutMapping
-    public ResponseEntity uptadeUser(@RequestBody @Valid RequestUser data) {
+    public ResponseEntity updateUser(@RequestBody @Valid RequestUser data) {
         Optional<User> optionalUser = repository.findById(data.id());
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
@@ -50,7 +50,7 @@ public class UserController {
 
     @Transactional
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable @Valid Long id){
+    public ResponseEntity deleteUser(@PathVariable @Valid Integer id){
         Optional<User> optionalUser = repository.findById(id);
         if(optionalUser.isPresent()){
             User user = optionalUser.get();

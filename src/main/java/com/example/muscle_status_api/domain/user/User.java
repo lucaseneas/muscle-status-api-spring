@@ -1,5 +1,6 @@
 package com.example.muscle_status_api.domain.user;
 
+import com.example.muscle_status_api.domain.workout.Workout;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
     private String email;
     private String password;
