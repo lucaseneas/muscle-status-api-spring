@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/workout-session")
-public class WorkoutSessionControler {
+public class WorkoutSessionController {
     @Autowired
     WorkoutSessionRepository workoutSessionRepository;
 
