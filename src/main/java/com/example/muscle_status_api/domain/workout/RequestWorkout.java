@@ -4,5 +4,5 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-public record RequestWorkout(@NotNull @NotBlank String name, String description, @NotNull @NotBlank Long user_id) {
+public record RequestWorkout(@NotNull @NotBlank String name, String description) {
 }
