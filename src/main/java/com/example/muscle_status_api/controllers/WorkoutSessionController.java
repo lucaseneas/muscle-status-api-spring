@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,6 +30,18 @@ public class WorkoutSessionController {
     public ResponseEntity findAll(){
         var allWorkoutSession = workoutSessionRepository.findAll();
         return ResponseEntity.ok(allWorkoutSession);
+    }
+
+    @GetMapping("/workout/{id}")
+    public List<WorkoutSession> findWorkoutSessionByWorkoutId(@PathVariable Integer id){
+        Optional<Workout> optionalWorkout = workoutRepository.findById(id);
+        if(optionalWorkout.isPresent()){
+            Workout workout = optionalWorkout.get();
+            return workoutSessionRepository.findByWorkout(workout);
+        }
+        else {
+            throw new EntityNotFoundException();
+        }
     }
 
     @PostMapping("/{id}")

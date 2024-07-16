@@ -29,6 +29,7 @@ public class User implements UserDetails {
     private String created_at = ZonedDateTime.now(ZoneId.of("GMT")).toString();
     private UserRole role;
 
+
     public User (RequestUser requestUser) {
         ZonedDateTime gmtTime = ZonedDateTime.now(ZoneId.of("GMT"));
 

@@ -9,9 +9,11 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,6 +30,20 @@ public class WorkoutController {
     public ResponseEntity getAllWorkout(){
         var allWorkout = workoutRepository.findAll();
         return ResponseEntity.ok(allWorkout);
+    }
+
+    @GetMapping("/user/{id}")
+    public List<Workout> findWorkoutByIdUser(@PathVariable Integer id){
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            return workoutRepository.findByUser(user);
+
+        }
+        else {
+            throw new EntityNotFoundException();
+        }
+
     }
 
     @PostMapping("/{id}")
