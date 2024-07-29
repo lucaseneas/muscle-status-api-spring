@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,6 +24,18 @@ public class UserController {
     public ResponseEntity getAllUsers(){
         var allUsers = repository.findAll();
         return ResponseEntity.ok(allUsers);
+    }
+
+    @GetMapping("/{id}")
+    public Optional<User> findUserById(@PathVariable Integer id){
+        Optional<User> optionalUser = repository.findById(id);
+        if(optionalUser.isPresent()){
+            return optionalUser;
+        }
+        else{
+            throw new EntityNotFoundException();
+        }
+
     }
 
     @PostMapping
