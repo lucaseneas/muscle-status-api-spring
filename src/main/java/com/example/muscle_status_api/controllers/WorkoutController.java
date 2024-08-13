@@ -47,8 +47,8 @@ public class WorkoutController {
 
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity addWorkoutToUser(@RequestBody  RequestWorkout data, @PathVariable  Integer id){
+    @PostMapping("/user/{id}")
+    public ResponseEntity addWorkoutToUser(@RequestBody @Valid RequestWorkout data, @PathVariable  Integer id){
         User user = userRepository.findById(id)
            .orElseThrow(() -> new IllegalArgumentException("Workout not found"));
 
