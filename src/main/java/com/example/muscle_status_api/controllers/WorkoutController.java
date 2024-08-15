@@ -49,16 +49,16 @@ public class WorkoutController {
 
     @PostMapping("/user/{id}")
     public ResponseEntity addWorkoutToUser(@RequestBody @Valid RequestWorkout data, @PathVariable  Integer id){
-        User user = userRepository.findById(id)
-           .orElseThrow(() -> new IllegalArgumentException("Workout not found"));
+            User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Workout not found"));
 
-        Workout workout = new Workout();
-        workout.setName(data.name());
-        workout.setDescription(data.description());
-        workout.setUser(user);
-        workoutRepository.save(workout);
+            Workout workout = new Workout();
+            workout.setName(data.name());
+            workout.setDescription(data.description());
+            workout.setUser(user);
+            workoutRepository.save(workout);
 
-        return ResponseEntity.ok(workout);
+            return ResponseEntity.ok(workout);
     }
 
     @Transactional

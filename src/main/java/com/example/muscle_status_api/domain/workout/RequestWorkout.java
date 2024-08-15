@@ -1,8 +1,9 @@
 package com.example.muscle_status_api.domain.workout;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-public record RequestWorkout(@NotNull @NotBlank String name, String description) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+public record RequestWorkout(@NotNull @NotBlank @NotEmpty String name, String description) {
 }
