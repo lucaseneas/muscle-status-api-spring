@@ -7,6 +7,7 @@ import com.example.muscle_status_api.domain.workoutSession.WorkoutSessionReposit
 import com.example.muscle_status_api.domain.workoutSessionExercise.WorkoutSessionExercise;
 import com.example.muscle_status_api.domain.workoutSessionExercise.WorkoutSessionExerciseRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +62,20 @@ public class WorkoutSessionExerciseController {
             return ResponseEntity.ok(workoutSessionExercise);
         }
         else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    @Transactional
+    @DeleteMapping("/{idWorkoutSessionExercise}")
+    public ResponseEntity removeWorkoutSessionExercise(@PathVariable(name="idWorkoutSessionExercise")Integer idWorkoutSessionExercise){
+        Optional<WorkoutSessionExercise> optionalWorkoutSessionExercise = workoutSessionExerciseRepository.findById(idWorkoutSessionExercise);
+        if(optionalWorkoutSessionExercise.isPresent()){
+            WorkoutSessionExercise workoutSessionExercise = optionalWorkoutSessionExercise.get();
+            workoutSessionExerciseRepository.delete(workoutSessionExercise);
+            return ResponseEntity.ok(workoutSessionExercise);
+        }
+        else{
             throw new EntityNotFoundException();
         }
     }
