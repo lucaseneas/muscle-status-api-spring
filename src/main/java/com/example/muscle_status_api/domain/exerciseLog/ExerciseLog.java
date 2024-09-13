@@ -25,6 +25,7 @@ public class ExerciseLog {
     private Integer setNumber;
     private Double weight;
     private Integer repetition;
+    private String description;
     private String log_date = ZonedDateTime.now(ZoneId.of("GMT")).toString();
 
     @JoinColumn(name="user_id", referencedColumnName = "id")

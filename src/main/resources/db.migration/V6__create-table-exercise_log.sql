@@ -3,6 +3,7 @@ CREATE TABLE exercise_log (
     weight DOUBLE ,
     repetition INT,
     set_number INT,
+    description VARCHAR(100),
     log_date VARCHAR(50),
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,

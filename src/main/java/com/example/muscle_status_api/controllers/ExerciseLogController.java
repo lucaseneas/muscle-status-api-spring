@@ -8,6 +8,7 @@ import com.example.muscle_status_api.domain.exerciseLog.RequestExerciseLog;
 import com.example.muscle_status_api.domain.user.User;
 import com.example.muscle_status_api.domain.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class ExerciseLogController {
     @PostMapping("/user-id/{userId}/exercise-id/{exerciseId}")
     public ResponseEntity addExerciseLog (@PathVariable(name="userId")Integer userId,
                                           @PathVariable(name="exerciseId")Integer exerciseId,
-                                          @RequestBody RequestExerciseLog body){
+                                          @RequestBody @Valid RequestExerciseLog body){
 
         Optional<User> optionalUser = userRepository.findById(userId);
         Optional<Exercise> optionalExercise = exerciseRepository.findById(exerciseId);
@@ -59,6 +60,7 @@ public class ExerciseLogController {
             exerciseLog.setSetNumber(body.setNumber());
             exerciseLog.setWeight(body.weight());
             exerciseLog.setRepetition(body.repetition());
+            exerciseLog.setDescription(body.description());
             exerciseLog.setUser(user);
             exerciseLog.setExercise(exercise);
             exerciseLogRepository.save(exerciseLog);
