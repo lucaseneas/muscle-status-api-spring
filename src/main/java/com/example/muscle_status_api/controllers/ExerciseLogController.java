@@ -11,11 +11,17 @@ import jakarta.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.sort;
 
 @RestController
 @RequestMapping("/exercise-log")
@@ -36,13 +42,30 @@ public class ExerciseLogController {
         return ResponseEntity.ok(findAll);
     }
 
+    @GetMapping("/user-id/{userId}/exercise-id/{exerciseId}")
+    public ResponseEntity findByUserAndExercise(@PathVariable(name="userId")Integer userId,@PathVariable(name="exerciseId") Integer exerciseId)
+    {
+        Optional<Exercise> optionalExercise = exerciseRepository.findById(exerciseId);
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalExercise.isPresent() && optionalUser.isPresent()){
+            User user = optionalUser.get();
+            Exercise exercise = optionalExercise.get();
+            var res = exerciseLogRepository.findByUserAndExercise(user,exercise);
+            return ResponseEntity.ok(res);
+        }
+        else{
+            throw new EntityNotFoundException();
+        }
+
+    }
+
     @GetMapping("/user-id/{userId}/exercise-id/{exerciseId}/date/{logDate}")
     public List<ExerciseLog> findByUserIdAndExerciseIdAndLogDate (@PathVariable(name="userId")Integer userId,
                                                  @PathVariable(name="exerciseId")Integer exerciseId,
                                                  @PathVariable(name="logDate")String logDate)
     {
-        // Colocar um optionaçl
-        return exerciseLogRepository.findByUserIdAndExerciseIdAndLogDate(userId,exerciseId,logDate);
+        var res = exerciseLogRepository.findByUser_IdAndExercise_IdAndLogDateStartingWith(userId, exerciseId, logDate.substring(0,11));
+        return res.stream().sorted(Comparator.comparing(ExerciseLog::getSetNumber)).toList();
     }
 
     @PostMapping("/user-id/{userId}/exercise-id/{exerciseId}")
@@ -65,6 +88,19 @@ public class ExerciseLogController {
             exerciseLog.setExercise(exercise);
             exerciseLogRepository.save(exerciseLog);
 
+            return ResponseEntity.ok(exerciseLog);
+        }
+        else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity deleteExerciseLog (@PathVariable(name="id")Integer id){
+        Optional<ExerciseLog> optionalExerciseLog = exerciseLogRepository.findById(id);
+        if(optionalExerciseLog.isPresent()){
+            ExerciseLog exerciseLog = optionalExerciseLog.get();
+            exerciseLogRepository.delete(exerciseLog);
             return ResponseEntity.ok(exerciseLog);
         }
         else {
